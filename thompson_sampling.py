@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import random
 
 # Setting the parameters
-N = 10000
+N = 100000
 d = 9
 
 # Creating the simulation
@@ -31,7 +31,7 @@ numbers_of_rewards_0 = [0] * d
 for n in range(0, N):
     # Random Strategy
     strategy_rs = random.randrange(d)
-    strategies_selected_rs.append(strategies_rs)
+    strategies_selected_rs.append(strategy_rs)
     reward_rs = X[n, strategy_rs]
     total_reward_rs = total_reward_rs + reward_rs
 
@@ -44,11 +44,23 @@ for n in range(0, N):
             max_random = random_beta
             strategy_ts = i
     
-            
-
+    reward_ts = X[n, strategy_ts]
+    if reward_ts == 1:
+         numbers_of_rewards_1[strategy_ts] = numbers_of_rewards_1[strategy_ts] + 1
+    else:
+        numbers_of_rewards_0[strategy_ts] = numbers_of_rewards_0[strategy_ts] + 1
+    strategies_selected_ts.append(strategy_ts)
+    total_reward_ts = total_reward_ts + reward_ts
 
 # Computing the Absolute and Relative Return
-)
+absolute_return = (total_reward_ts - total_reward_rs)*100
+relative_return = (total_reward_ts - total_reward_rs) / total_reward_rs * 100
+print("Absolute Return: {:.0f} $".format(absolute_return))
+print("Relative Return: {:.0f} %".format(relative_return))
 
 # Plotting the Histogram of Selections
-
+plt.hist(strategies_selected_ts)
+plt.title('Histogram of Selections')
+plt.xlabel('Strategy')
+plt.ylabel('Number of times the strategy was selected')
+plt.show()
